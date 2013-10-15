@@ -124,6 +124,7 @@ static UIColor *colorWithHexString(NSString *hexString);
     }
 
 	UIColor *color = colorWithHexString(colorString);
+    NSAssert(color != nil, @"Didn't find color for key %@", key);
 	if (color == nil)
 		color = [UIColor blackColor];
 
