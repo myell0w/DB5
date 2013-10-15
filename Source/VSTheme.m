@@ -44,9 +44,10 @@ static UIColor *colorWithHexString(NSString *hexString);
 
 - (id)objectForKey:(NSString *)key {
 
+    VSTheme *parentTheme = self.parentTheme;
 	id obj = [self.themeDictionary valueForKeyPath:key];
-	if (obj == nil && self.parentTheme != nil)
-		obj = [self.parentTheme objectForKey:key];
+	if (obj == nil && parentTheme != nil)
+		obj = [parentTheme objectForKey:key];
 	return obj;
 }
 
