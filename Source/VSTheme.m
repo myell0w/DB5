@@ -117,6 +117,11 @@ static UIColor *colorWithHexString(NSString *hexString);
 		return cachedColor;
     
 	NSString *colorString = [self stringForKey:key];
+    // Color variables
+    if ([colorString hasPrefix:@"$"]) {
+        colorString = [self stringForKey:[colorString substringFromIndex:1]];
+    }
+
 	UIColor *color = colorWithHexString(colorString);
 	if (color == nil)
 		color = [UIColor blackColor];
