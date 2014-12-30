@@ -114,8 +114,9 @@ static UIColor *colorWithHexString(NSString *hexString);
 - (UIColor *)colorForKey:(NSString *)key {
 
 	UIColor *cachedColor = [self.colorCache objectForKey:key];
-	if (cachedColor != nil)
-		return cachedColor;
+    if (cachedColor != nil) {
+        return cachedColor == (UIColor *)[NSNull null] ? nil : cachedColor;
+    }
     
 	NSString *colorString = [self stringForKey:key];
     // Color variables
@@ -124,15 +125,10 @@ static UIColor *colorWithHexString(NSString *hexString);
     }
 
 	UIColor *color = colorWithHexString(colorString);
-    NSAssert(color != nil, @"Didn't find color for key %@", key);
-	if (color == nil)
-		color = [UIColor blackColor];
-
-	[self.colorCache setObject:color forKey:key];
+    [self.colorCache setObject:color ?: [NSNull null] forKey:key];
 
 	return color;
 }
-
 
 - (UIEdgeInsets)edgeInsetsForKey:(NSString *)key {
 
@@ -271,10 +267,10 @@ static BOOL stringIsEmpty(NSString *s) {
 
 static UIColor *colorWithHexString(NSString *hexString) {
 
-	/*Picky. Crashes by design.*/
-	
-	if (stringIsEmpty(hexString))
-		return [UIColor blackColor];
+	/* Picky. Crashes by design. */
+    if (stringIsEmpty(hexString)) {
+        return nil;
+    }
 
 	NSMutableString *s = [hexString mutableCopy];
 	[s replaceOccurrencesOfString:@"#" withString:@"" options:0 range:NSMakeRange(0, [hexString length])];
